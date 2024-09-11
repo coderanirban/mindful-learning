@@ -1,9 +1,9 @@
-// MoodTracker.js
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Grid, Card, CardContent, Button, Typography, TextField, MenuItem, List, ListItem, ListItemText, Avatar, Divider, Paper, LinearProgress } from '@mui/material';
 import Navbar from './Navbar';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
+import Webcam from 'react-webcam'; // Import Webcam
 
 // Mock data for the chart (replace with dynamic data)
 const mockMoodData = {
@@ -31,6 +31,17 @@ const MoodTracker = () => {
   const [selectedMood, setSelectedMood] = useState('');
   const [moodNote, setMoodNote] = useState('');
   const [weeklyMood, setWeeklyMood] = useState(4);  // Placeholder for the average weekly mood score
+  const [detectedMood, setDetectedMood] = useState('');  // Mood detected from webcam
+  
+  // Webcam reference
+  const webcamRef = React.useRef(null);
+
+  // Mock face detection logic based on random chance (just for illustration)
+  const detectMoodFromFace = useCallback(() => {
+    const moods = ['😊 Happy', '😢 Sad'];
+    const randomMood = moods[Math.floor(Math.random() * moods.length)];
+    setDetectedMood(randomMood);
+  }, []);
 
   const handleMoodChange = (event) => {
     setSelectedMood(event.target.value);
@@ -51,10 +62,12 @@ const MoodTracker = () => {
     <div>
       {/* <Navbar /> Add Navbar here */}
       <Grid container spacing={3} style={{ padding: 20 }}>
-
         {/* Daily Mood Entry */}
+      <Grid container spacing={3} style={{ padding: 20 }}>
+           {/* Left column - How Are You Feeling Today and Weekly Mood Summary */}
         <Grid item xs={12} md={6}>
-          <Card style={{ backgroundColor: '#e3f2fd', borderRadius: '10px' }}>
+          {/* How Are You Feeling Today */}
+          <Card style={{ backgroundColor: '#e3f2fd', borderRadius: '10px', marginBottom: 20 }}>
             <CardContent>
               <Typography variant="h5" style={{ color: '#1e88e5' }}>How Are You Feeling Today?</Typography>
               <TextField
@@ -94,10 +107,8 @@ const MoodTracker = () => {
               </Button>
             </CardContent>
           </Card>
-        </Grid>
 
-        {/* Weekly Mood Summary */}
-        <Grid item xs={12} md={6}>
+          {/* Weekly Mood Summary */}
           <Card style={{ backgroundColor: '#f0f4c3', borderRadius: '10px' }}>
             <CardContent>
               <Typography variant="h5" style={{ color: '#afb42b' }}>Weekly Mood Summary</Typography>
@@ -107,6 +118,36 @@ const MoodTracker = () => {
               <Typography variant="body2" style={{ marginTop: 10 }}>Keep tracking your mood daily for better insights!</Typography>
             </CardContent>
           </Card>
+        </Grid>
+
+        {/* Right column - Webcam and Face Mood Detection */}
+        <Grid item xs={12} md={6}>
+          <Card style={{ backgroundColor: '#e8f5e9', borderRadius: '10px' }}>
+            <CardContent>
+              <Typography variant="h6" style={{ color: '#43a047' }}>Detect Mood from Face</Typography>
+              <Webcam
+                audio={false}
+                ref={webcamRef}
+                screenshotFormat="image/jpeg"
+                style={{ width: '100%', marginBottom: 20 }}
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                onClick={detectMoodFromFace}
+              >
+                Detect Mood
+              </Button>
+              {detectedMood && (
+                <Typography variant="h6" style={{ color: '#43a047', marginTop: 20 }}>
+                  Detected Mood: {detectedMood}
+                </Typography>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
+
         </Grid>
 
         {/* Mood History (Calendar-like display) */}
