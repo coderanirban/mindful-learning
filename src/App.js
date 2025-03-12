@@ -9,7 +9,7 @@ import Dashboard from './components/Dashboard';
 import Quests from './components/Quests';
 import MoodTracker from './components/MoodTracker';
 import Leaderboard from './components/Leaderboard';
-import LandingPage from './components/LandingPage';  // Import LandingPage
+// import LandingPage from './components/LandingPage';  // Import LandingPage
 import MindfulnessExercise from './components/MindfulnessExercise';
 
 // Import the custom styled components
@@ -37,7 +37,7 @@ function App() {
           {isLoggedIn && <Navbar />} {/* Show Navbar only if logged in */}
           <Routes>
             {/* Landing Page Route */}
-            <Route path="/" element={<LandingPage />} />
+            {/* <Route path="/" element={<LandingPage />} /> */}
             <Route path="/home" element={<Home />} /> {/* Route for Home page */}
             <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/" />} />
             <Route path="/quests" element={isLoggedIn ? <Quests /> : <Navigate to="/" />} />
